@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+        }
+        .divider:not(:empty)::before {
+            margin-right: .25em;
+        }
+        .divider:not(:empty)::after {
+            margin-left: .25em;
+        }
+        .social-buttons .btn {
+            margin: 0 5px;
+        }
+        .bg-gradient {
+            background: linear-gradient(to bottom, blue, green, yellow);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script>
+        function togglePasswordVisibility(id) {
+            var field = document.getElementById(id);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
+            }
+        }
+
+        async function signIn(event) {
+            event.preventDefault();
+            const url = 'http://10.0.2.2:8000/sign-in/';
+            const formData = new FormData(event.target);
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Sign in successful', data);
+                    window.location.href = 'home_screen.html';  // Replace with actual Home Screen URL
+                } else {
+                    console.error('Sign in failed:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="bg-gradient">
+        <div class="container bg-white p-5 rounded">
+            <h1 class="text-center">Log In</h1>
+            <form onsubmit="signIn(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePasswordVisibility('password')">Show</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Log In</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="forgot_pass.html">Forgot Password?</a> <!-- Replace with actual Forgot Password URL -->
+            </div>
+            <div class="text-center mt-3">
+                <div class="divider">or</div>
+                <div class="social-buttons d-flex justify-content-center mt-2">
+                    <button class="btn btn-outline-primary">Facebook</button>
+                    <button class="btn btn-outline-danger">Google</button>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p> <!-- Replace with actual Sign Up URL -->
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
